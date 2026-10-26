@@ -350,9 +350,8 @@ function loop(t){
  if(mode==='attack'&&touch>=25&&t-lastTr>3500){lastTr=t;shake();cpt={x:M.x,y:M.y,e:'',r:24,need:25,cl:0,n:0,cn:0,mv:false,dead:0,cap:1};heavies.push(cpt);M.down=false;snd.hum(false);cv.style.cursor='none';setMode('free','Cursor dragged to the nest 🕳️');toast('Commander surrounded! The ants are carrying your cursor to the nest 😂')}
  draw();requestAnimationFrame(loop)}
 
-function panelInset(){const d=$('#deck');if(innerWidth<=640||!document.body.classList.contains('controls-open'))return 0;return d.offsetHeight+(parseFloat(getComputedStyle(d).bottom)||0)+8}
 function positionControlsButton(){const b=$('#tg2'),d=$('#deck');if(innerWidth<=640||!document.body.classList.contains('controls-open')){b.style.bottom='';return}b.style.bottom=(d.offsetHeight+(parseFloat(getComputedStyle(d).bottom)||0)+8)+'px'}
-function resize(){W=cv.width=innerWidth;H=Math.max(240,innerHeight-panelInset());cv.height=H;cv.style.height=H+'px';GW=Math.ceil(W/GC);GH=Math.ceil(H/GC);G=new Float32Array(GW*GH);hills=[[60,165],[W-60,165],[60,H-120],[W-60,H-120]];const m=Math.min(W,H);RR=[m*.16,m*.25,m*.34];mg=Math.min(170,W*.28,H*.28);positionControlsButton();if(mode==='form'&&refm)refm()}
+function resize(){const w=innerWidth,h=Math.max(240,innerHeight),changed=w!==W||h!==H;if(changed){W=w;H=h;cv.width=W;cv.height=H;cv.style.height=H+'px';GW=Math.ceil(W/GC);GH=Math.ceil(H/GC);G=new Float32Array(GW*GH);hills=[[60,165],[W-60,165],[60,H-120],[W-60,H-120]];const m=Math.min(W,H);RR=[m*.16,m*.25,m*.34];mg=Math.min(170,W*.28,H*.28);if(mode==='form'&&refm)refm()}positionControlsButton()}
 addEventListener('resize',resize);resize();
 if('ResizeObserver' in window)new ResizeObserver(()=>resize()).observe($('#deck'));
 ants=Array.from({length:innerWidth<700?320:520},(_,i)=>new Ant(i));hud();
@@ -388,7 +387,7 @@ document.querySelectorAll('[data-an]').forEach(b=>b.onclick=()=>{const k=b.datas
 $('#bd').onclick=countdown;
 $('#bk').onclick=()=>{G.fill(0);foods=[];heavies=[];crumbs=[];trail=[];hadCr=false;toast('Arena cleared 🧹')};
 $('#mute').onclick=()=>{snd.mute=!snd.mute;$('#mute').textContent=snd.mute?'🔇':'🔊';if(snd.mute){snd.hum(false);drums(false)}else if(mode==='parade')drums(true)};
-function togglePanels(){const open=document.body.classList.toggle('controls-open');$('#tg2').setAttribute('aria-expanded',String(open));$('#tg2').setAttribute('aria-label',open?'Close controls':'Open controls');$('#tg2').textContent=open?'✕ Hide controls':'🎛️ Controls';resize();if(!open)document.activeElement&&document.activeElement.blur()}
+function togglePanels(){const open=document.body.classList.toggle('controls-open');$('#tg2').setAttribute('aria-expanded',String(open));$('#tg2').setAttribute('aria-label',open?'Close controls':'Open controls');$('#tg2').textContent=open?'✕ Hide controls':'🎛️ Controls';requestAnimationFrame(positionControlsButton);if(!open)document.activeElement&&document.activeElement.blur()}
 $('#tg2').onclick=togglePanels;
 addEventListener('keydown',e=>{if(e.target.id==='txt')return;if(e.key==='h'||e.key==='H')togglePanels()});
 addEventListener('keydown',e=>{if(e.code==='Space'&&e.target.tagName!=='INPUT'){e.preventDefault();if(!e.repeat)attn()}else if(e.key==='Escape'){if(document.body.classList.contains('controls-open'))togglePanels();else $('#bf').click()}});
