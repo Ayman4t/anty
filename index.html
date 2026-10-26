@@ -50,16 +50,17 @@ body.controls-open #deck{transform:translateY(0);opacity:1;visibility:visible;po
 .fg{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
 .fg>span{font-size:.7rem;color:#94a3b8;font-weight:600}
 @media(min-width:641px){
- #deck{max-width:84rem;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));align-items:stretch;justify-content:stretch;gap:.65rem;padding:.8rem;max-height:min(72vh,760px);scrollbar-width:thin;scrollbar-color:rgba(148,163,184,.4) transparent}
+ #deck{max-width:76rem;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));align-items:stretch;justify-content:stretch;gap:.45rem;padding:.6rem;max-height:min(72vh,760px);scrollbar-width:thin;scrollbar-color:rgba(148,163,184,.4) transparent}
  #deck::-webkit-scrollbar{width:8px}#deck::-webkit-scrollbar-thumb{background:rgba(148,163,184,.35);border-radius:8px}#deck::-webkit-scrollbar-track{background:transparent}
- #commands{grid-column:1/-1;display:grid;grid-template-columns:minmax(190px,230px) minmax(0,1fr);align-items:center;gap:.65rem;padding:0 0 .7rem}
+ #deck .gb{font-size:.7rem;padding:5px 9px;border-radius:10px}
+ #commands{grid-column:1/-1;display:grid;grid-template-columns:minmax(175px,210px) minmax(0,1fr);align-items:center;gap:.5rem;padding:0 0 .5rem}
  #commands>#txt{width:100%;min-width:0;flex:none}
- #commands .in{display:flex;flex:1;flex-wrap:wrap;justify-content:flex-start;gap:.45rem}
+ #commands .in{display:flex;flex:1;flex-wrap:wrap;justify-content:flex-start;gap:.35rem}
  #commands .in .sep{display:none}
  #tools,#fms,#skins{grid-column:1/-1}
  #maps,#feed{grid-column:span 6}
- .fg{align-content:flex-start;align-items:center;gap:.45rem;padding:.55rem .65rem;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:12px;min-width:0}
- .fg>span{flex:0 0 100%;margin-bottom:.1rem}
+ .fg{align-content:flex-start;align-items:center;gap:.35rem;padding:.4rem .5rem;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:11px;min-width:0}
+ .fg>span{flex:0 0 100%;margin-bottom:0}
 }
 @media(min-width:641px) and (max-width:900px){
  #deck{grid-template-columns:minmax(0,1fr);max-height:76vh}
@@ -111,7 +112,6 @@ body.controls-open #deck{transform:translateY(0);opacity:1;visibility:visible;po
    <span class="sep"></span>
    <button class="gb am" id="bp">Military parade 🥁</button>
    <button class="gb em" id="ba">Whistle! Fall in 🎺</button>
-   <button class="gb" id="bs">Shield wall 🛡️</button>
    <button class="gb" id="bt">Stealth 🥷</button>
    <button class="gb" id="bf">Free 🕊️</button>
   </div>
@@ -163,7 +163,8 @@ class SoundEngine{
  hum(on){if(!this.c)return;const c=this.c,t=c.currentTime;if(on&&!this.h&&!this.mute){const hs=this.pl('hum',true);if(hs){this.h={hs};return}const o=c.createOscillator(),g=c.createGain();o.type='sawtooth';o.frequency.setValueAtTime(90,t);o.frequency.exponentialRampToValueAtTime(520,t+1.2);g.gain.value=.06;o.connect(g);g.connect(this.m);o.start();this.h={o,g}}else if(!on&&this.h&&this.h.hs){const q=this.h.hs;if(q.s){try{q.s.stop()}catch(x){}}if(q.a){q.a.pause()}this.h=null}else if(!on&&this.h){this.h.g.gain.setTargetAtTime(0,t,.08);this.h.o.stop(t+.4);this.h=null}}
 }
 const snd=new SoundEngine();
-function drums(on){clearInterval(drum);if(on)drum=setInterval(()=>{if(dstep%2===0)beat=1;if(dstep%4===0)snd.kick();if(dstep%2===1)snd.snare();dstep++},230)}
+const paradeAudio=new Audio('assets/military-parade-drummers.mp3');paradeAudio.loop=true;paradeAudio.preload='auto';paradeAudio.playsInline=true;paradeAudio.volume=.72;
+function drums(on){clearInterval(drum);if(mode==='parade'){if(on&&!snd.mute){if(paradeAudio.paused){paradeAudio.currentTime=0;paradeAudio.play().catch(()=>{})}}else{paradeAudio.pause();paradeAudio.currentTime=0}return}paradeAudio.pause();paradeAudio.currentTime=0;if(on)drum=setInterval(()=>{if(dstep%2===0)beat=1;if(dstep%4===0)snd.kick();if(dstep%2===1)snd.snare();dstep++},230)}
 
 let tt;function toast(s){const t=$('#toast');t.textContent=s;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2600)}
 function hud(){$('#sN').textContent=ants.length;$('#sD').textContent=dev;$('#sS').textContent=store;$('#sM').textContent=base+(stealth?' + Stealth':'')}
@@ -214,9 +215,8 @@ function upd(a){
  let tx=0,ty=0,mx=2.4,ad=70,tg=0,sp=0,tr=0;const fm=mode==='form'||mode==='clock';a.lk=false;a.hs=false;a.eat=0;
  if(mode==='rally'){if(a.rx==null||a.ry==null)rankTargets();tx=a.rx;ty=a.ry;tg=1;mx=18;ad=150}
   else if(fm){if(a.fx!=null){tx=a.fx;ty=a.fy;tg=1;mx=7}}
- else if(mode==='parade'){const p=PP(pS-(a.i?a.rw*17:-34)),c=a.i?(a.cl-3.5)*14:0;tx=p.x+p.nx*c;ty=p.y+p.ny*c;tg=1;mx=9}
+ else if(mode==='parade'){const p=PP(pS-(a.i?a.rw*17:-17)),c=a.i?(a.cl-3.5)*14:0;tx=p.x+p.nx*c;ty=p.y+p.ny*c;tg=1;mx=9}
  else if(mode==='anim'){const p=anim(a);tx=p[0];ty=p[1];mx=p[2];tg=1;ad=40;a.lk=!!p[3]}
- else if(mode==='shield'){const an=rot*(a.rg===1?-1:1)+a.sa2;tx=W/2+Math.cos(an)*RR[a.rg];ty=H/2+Math.sin(an)*RR[a.rg];tg=1;mx=8;ad=30}
  else if(mode==='attack'){tx=M.x;ty=M.y;tg=1;mx=4.5;a.hs=true;sp=1;if(M.x>0&&D(a.x-M.x,a.y-M.y)<34)touch++}
  else{
   if(heavies.length&&!a.carry&&!a.job){const hv=heavies.find(h=>h.cl<h.need+18);if(hv){a.job=hv;hv.cl++;a.at=false}}
@@ -366,7 +366,7 @@ function loop(t){
  draw();requestAnimationFrame(loop)}
 
 function positionControlsButton(){const b=$('#tg2'),d=$('#deck');if(innerWidth<=640||!document.body.classList.contains('controls-open')){b.style.bottom='';return}b.style.bottom=(d.offsetHeight+(parseFloat(getComputedStyle(d).bottom)||0)+8)+'px'}
-function resize(){const w=innerWidth,h=Math.max(240,innerHeight),changed=w!==W||h!==H;if(changed){W=w;H=h;cv.width=W;cv.height=H;cv.style.height=H+'px';GW=Math.ceil(W/GC);GH=Math.ceil(H/GC);G=new Float32Array(GW*GH);hills=[[60,165],[W-60,165],[60,H-120],[W-60,H-120]];const m=Math.min(W,H);RR=[m*.16,m*.25,m*.34];mg=Math.min(170,W*.28,H*.28);if(mode==='form'&&refm)refm()}positionControlsButton()}
+function resize(){const w=innerWidth,h=Math.max(240,innerHeight),changed=w!==W||h!==H;if(changed){W=w;H=h;cv.width=W;cv.height=H;cv.style.height=H+'px';GW=Math.ceil(W/GC);GH=Math.ceil(H/GC);G=new Float32Array(GW*GH);hills=[[60,165],[W-60,165],[60,H-120],[W-60,H-120]];const m=Math.min(W,H);mg=Math.min(170,W*.28,H*.28);if(mode==='form'&&refm)refm()}positionControlsButton()}
 addEventListener('resize',resize);resize();
 if('ResizeObserver' in window)new ResizeObserver(()=>resize()).observe($('#deck'));
 ants=Array.from({length:innerWidth<700?320:520},(_,i)=>new Ant(i));hud();
@@ -390,10 +390,9 @@ $('#b3d').onclick=()=>{map3d=!map3d;$('#b3d').textContent='3D: '+(map3d?'On':'Of
 document.querySelectorAll('[data-map]').forEach(b=>b.onclick=()=>formMap(b.dataset.map));
 $('#bc').onclick=()=>{setMode('clock','Live clock ⏰');clearInterval(ck);clockTick();ck=setInterval(()=>{if(mode==='clock')clockTick()},1000);toast('Live clock running, sir! ⏰')};
 $('#bx').onclick=detonate;
-$('#bp').onclick=()=>{ants.forEach((a,i)=>{a.rw=Math.floor(i/8);a.cl=i%8});setMode('parade','Parade 🥁');drums(!snd.mute);toast('Military parade ready! 🥁')};
+$('#bp').onclick=()=>{let slot=0;ants.forEach(a=>{if(a.i===0){a.rw=0;a.cl=3.5;return}a.rw=Math.floor(slot/8);a.cl=slot%8;slot++});setMode('parade','Parade 🥁');toast('Military parade ready! 🥁')};
 function attn(){if(mode==='attn'||mode==='rally'){setMode('free','Free');toast('At ease, soldiers! 🕊️');return}rankTargets();setMode('rally','Rallying into ranks 🎺');snd.whistle();toast('Whistle! The squad is forming rows…');cdT=setTimeout(()=>{if(mode!=='rally')return;rankTargets();ants.forEach(a=>{a.x=a.rx;a.y=a.ry;a.vx=a.vy=0;a.ang=-1.5708;a.lk=true});setMode('attn','Attention 🎖️');toast('Squad formed into ranks! 🎖️')},3000)}
 $('#ba').onclick=attn;
-$('#bs').onclick=()=>{const w=RR.reduce((x,y)=>x+y,0),n=ants.length,c=RR.map(r=>Math.round(n*r/w));c[2]=n-c[0]-c[1];let k=0,j=0;ants.forEach(a=>{if(j>=c[k]){k++;j=0}a.rg=k;a.sa2=6.283*j/c[k];j++});setMode('shield','Shield wall 🛡️');toast('Shield wall formed! 🛡️')};
 $('#bt').onclick=()=>{stealth=!stealth;$('#bt').classList.toggle('on',stealth);hud();toast(stealth?'Stealth on… your cursor is the night-vision light 🥷':'Stealth off')};
 $('#bf').onclick=()=>{setMode('free','Free');toast('The squad is free 🕊️')};
 document.querySelectorAll('[data-drop]').forEach(b=>b.onclick=()=>{const t=Math.max(200,H*.2),u=Math.max(t+50,H-200);dropFood(120+R()*Math.max(50,W-240),t+R()*(u-t),+b.dataset.drop)});
