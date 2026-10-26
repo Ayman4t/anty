@@ -338,7 +338,7 @@ function loop(t){
  if(0){cx.globalCompositeOperation='destination-out';cx.fillStyle='rgba(0,0,0,.3)';cx.fillRect(0,0,W,H);cx.globalCompositeOperation='source-over'}else cx.clearRect(0,0,W,H);
  rot+=.012;pS+=1.7;touch=0;FR++;if(cpt&&!cpt.dead){M.x=cpt.x;M.y=cpt.y}if(splats.length){splats.forEach(p=>p.l--);splats=splats.filter(p=>p.l>0)}if(FR%3===0)for(let i=0;i<G.length;i++)G[i]*=.995;
  foods.forEach(f=>f.r=f.r0*(.25+.75*Math.max(0,f.hp)/f.max));foods=foods.filter(f=>!f.dead);
- heavies.forEach(h=>{h.cn=h.n;h.n=0;h.mv=false;if(h.cn>=h.need){const q=nh(h),dx=q[0]-h.x,dy=q[1]-h.y,d=D(dx,dy)||1,s=Math.min(h.cap?3:1.5,(h.cap?1.6:.7)+(h.cn-h.need)*.02);h.x+=dx/d*s;h.y+=dy/d*s;h.mv=true;if(d<55){h.dead=1;dev++;hud();if(h.cap){cpt=null;cv.style.cursor='';M.x=M.y=-999;toast('The cursor was dragged into the nest! 😂🕳️');if(tool==='attack')setMode('attack','Attack cursor')}else toast('Loot stolen and carried into the nest! 🏴‍☠️')}}});
+ heavies.forEach(h=>{h.cn=h.n;h.n=0;h.mv=false;if(h.cn>=h.need){const q=nh(h),dx=q[0]-h.x,dy=q[1]-h.y,d=D(dx,dy)||1,s=Math.min(h.cap?3:1.5,(h.cap?1.6:.7)+(h.cn-h.need)*.02);h.x+=dx/d*s;h.y+=dy/d*s;h.mv=true;if(d<55){h.dead=1;dev++;if(!h.cap)store+=h.cn;hud();if(h.cap){cpt=null;cv.style.cursor='';M.x=M.y=-999;toast('The cursor was dragged into the nest! 😂🕳️');if(tool==='attack')setMode('attack','Attack cursor')}else toast('Loot delivered! +'+h.cn+' colony stock 🍯 🏴‍☠️')}}});
  if(map3d&&curMap&&mode==='form')tick3d();buildSG();if(mode==='anim')animPre();for(let k=0;k<ants.length;k++){const a=ants[k];a.ai=k;upd(a)}killDue();
  heavies=heavies.filter(h=>!h.dead);
  crumbs.forEach(c=>{c.x+=c.vx;c.y+=c.vy;c.vx*=.94;c.vy*=.94;c.x=Math.min(W-3,Math.max(3,c.x));c.y=Math.min(H-3,Math.max(3,c.y))});
