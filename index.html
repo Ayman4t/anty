@@ -40,29 +40,26 @@ h1{margin:0;font-family:'Changa',sans-serif;font-weight:800;font-size:1.05rem;ba
 .sep{width:1px;height:20px;background:rgba(255,255,255,.1)}
 #toast{position:fixed;top:calc(170px + env(safe-area-inset-top,0px));left:50%;transform:translate(-50%,16px) scale(.9);z-index:10;background:rgba(16,18,27,.92);border:1px solid rgba(255,183,3,.6);color:#fde68a;font-weight:700;padding:8px 18px;border-radius:14px;box-shadow:0 8px 28px rgba(224,122,95,.35);opacity:0;pointer-events:none;transition:.3s cubic-bezier(.22,1,.36,1);text-align:center;max-width:92vw}
 #toast.on{opacity:1;transform:translate(-50%,0) scale(1)}
-#deck{position:fixed;bottom:calc(.6rem + env(safe-area-inset-bottom,0px));left:.6rem;right:.6rem;max-width:72rem;margin:0 auto;z-index:20;display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;justify-content:space-between;padding:.55rem .75rem;max-height:40vh;overflow:auto}
+#deck{position:fixed;bottom:calc(.6rem + env(safe-area-inset-bottom,0px));left:.6rem;right:.6rem;max-width:72rem;margin:0 auto;z-index:20;display:none;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;justify-content:space-between;padding:.55rem .75rem;max-height:40vh;overflow:auto}
+body.controls-open #deck{display:flex}
 #commands{display:flex;align-items:center;gap:.5rem;width:100%;padding-bottom:.45rem;border-bottom:1px solid rgba(255,255,255,.08)}
 #commands>#txt{flex:0 1 190px;min-width:150px}
 #commands .in{flex:1}
-#hd,#deck{transition:transform .6s cubic-bezier(.22,1,.36,1),opacity .5s ease,visibility 0s}
-body.cine #hd{transform:translateY(-140%);opacity:0;visibility:hidden;pointer-events:none;transition:transform .6s cubic-bezier(.22,1,.36,1),opacity .5s ease,visibility 0s .6s}
-body.cine #deck{transform:translateY(140%);opacity:0;visibility:hidden;pointer-events:none;transition:transform .6s cubic-bezier(.22,1,.36,1),opacity .5s ease,visibility 0s .6s}
-#tg2{position:fixed;top:calc(.6rem + env(safe-area-inset-top,0px));right:.6rem;z-index:30;opacity:0;pointer-events:none;transition:opacity .3s}
-body.cine #tg2{pointer-events:auto}body.cine #tg2:hover,body.cine #tg2:focus-visible{opacity:.7}
-@media(prefers-reduced-motion:reduce){#hd,#deck{transition:none!important}}
+#tg2{position:fixed;right:.65rem;bottom:calc(.65rem + env(safe-area-inset-bottom,0px));z-index:30;opacity:1;pointer-events:auto;transition:opacity .3s}
+@media(prefers-reduced-motion:reduce){#tg2{transition:none!important}}
 .fg{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
 .fg>span{font-size:.7rem;color:#94a3b8;font-weight:600}
 @media(max-width:640px){
  #hd{top:calc(.35rem + env(safe-area-inset-top,0px));left:.4rem;right:.4rem;gap:.25rem}
  .row{gap:.35rem;padding:.35rem .5rem}
  .br{gap:.4rem}.lg{width:34px;height:34px;font-size:1.25rem}h1{font-size:1rem}.bd{font-size:.62rem;padding:0 7px}
- .sub,#tg{display:none}
+ .sub{display:none}
  .cs{width:100%;gap:.25rem}
  .cn{flex:1;min-width:0;justify-content:center;gap:4px;padding:4px 5px}
  .cn small{font-size:.52rem;white-space:normal;text-align:center;line-height:1.05}.cn b{font-size:.82rem}.cn>span{font-size:.85rem}
  #mute{padding:5px 8px}
  #deck{display:none;left:.45rem;right:.45rem;bottom:calc(4.2rem + env(safe-area-inset-bottom,0px));width:auto;max-width:none;max-height:68vh;max-height:min(68dvh,620px);padding:.6rem;gap:.65rem;flex-direction:column;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start;overflow:auto;overscroll-behavior:contain}
- body.mobile-controls #deck{display:flex}
+ body.controls-open #deck{display:flex}
  #commands{display:flex;flex-direction:column;align-items:stretch;gap:.45rem;padding-bottom:.6rem}
  #commands>#txt{flex:0 0 auto;width:100%;min-width:0}
  #commands .in{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:.4rem}
@@ -83,7 +80,7 @@ body.cine #tg2{pointer-events:auto}body.cine #tg2:hover,body.cine #tg2:focus-vis
    <div class="cn"><span>🎖️</span><div><small>Army strength</small><b id="sN">0</b></div></div>
    <div class="cn c"><span>🐜</span><div><small>Targets destroyed</small><b id="sD">0</b></div></div>
    <div class="cn t"><span>🍯</span><div><small>Colony stock</small><b id="sS">0</b></div></div>
-   <button class="gb am" id="mute" aria-label="Mute sound">🔊</button><button class="gb" id="tg" aria-label="Show or hide panel">🎛️ Panel</button>
+   <button class="gb am" id="mute" aria-label="Mute sound">🔊</button>
   </div>
  </div>
 </header>
@@ -106,7 +103,6 @@ body.cine #tg2{pointer-events:auto}body.cine #tg2:hover,body.cine #tg2:focus-vis
  </div>
  <div class="fg" id="tools"><span>Mouse tools:</span>
   <button class="gb" data-t="pher">🖌️ Pheromones</button><button class="gb on" data-t="food">🍰 Drop food</button><button class="gb" data-t="heist">🍕📦 Heist</button><button class="gb" data-t="attack">🎯 Attack cursor</button><button class="gb" data-t="vortex">🌀 Vortex</button><button class="gb ro" data-t="kill">👣 Squash ants</button><button class="gb cy" id="br">🎖️ +100 reinforcements</button><button class="gb ro" id="bk">🧹 Clear</button></div>
- <div class="fg" id="weapons"><span>Combat:</span><button class="gb am" id="arm" aria-pressed="false">⚔️ Arm ants</button></div>
  <div class="fg" id="fms"><span>Tactical formations:</span><button class="gb" data-an="spear">📐 V-Spearhead</button><button class="gb" data-an="pincer">🦂 Pincer</button><button class="gb" data-an="square">🏰 Hollow square</button><button class="gb" data-an="wave">🌊 Stadium wave</button><button class="gb cy" data-an="heart">💓 Pulsing heart</button><button class="gb cy" data-an="inf">♾️ Infinity</button><button class="gb cy" data-an="eq">📊 Equalizer</button><button class="gb am" data-sh="👑|Royal crown">👑 Royal crown</button><button class="gb ro" id="bd">⏱️ Countdown 3-2-1-GO</button></div>
  <div class="fg" id="maps"><span>🗺️ Country maps:</span><button class="gb em" data-map="egypt">Egypt</button><button class="gb cy" data-map="usa">United States</button><button class="gb ro" data-map="uk">Britain</button><button class="gb am" data-map="canada">Canada</button><button class="gb" id="b3d">3D: On</button></div>
  <div class="fg" id="feed"><span>Feed the army:</span><button class="gb" data-drop="0">🍬 Sugar</button><button class="gb" data-drop="1">🍰 Basbousa</button><button class="gb" data-drop="2">🍪 Cookie</button><button class="gb em" data-drop="3">🐞 Code bug</button></div>
@@ -114,7 +110,7 @@ body.cine #tg2{pointer-events:auto}body.cine #tg2:hover,body.cine #tg2:focus-vis
 </footer>
 <script>
 const $=s=>document.querySelector(s),cv=$('#cv'),cx=cv.getContext('2d'),D=Math.hypot,R=Math.random;
-let W,H,mode='free',base='Free',tool='food',skin='cyber',stealth=false,weapons=false,dev=0,rot=0,pS=0,touch=0,lastTr=0,nib=0,nibT=0,hadCr=false,refm=null,ck=0,drum=0,dstep=0;
+let W,H,mode='free',base='Free',tool='food',skin='cyber',stealth=false,dev=0,rot=0,pS=0,touch=0,lastTr=0,nib=0,nibT=0,hadCr=false,refm=null,ck=0,drum=0,dstep=0;
 const SK={cyber:{a:'#00f5d4',b:'#e07a5f',g:'rgba(0,245,212,.35)',d:'#0a1a1f'},gold:{a:'#8a8d3a',b:'#ffb703',g:'rgba(255,183,3,.35)',d:'#2b2a10'},fire:{a:'#ef4444',b:'#f97316',g:'rgba(249,115,22,.35)',d:'#2e0d0a'}};
 SK.fl_r={a:'#7a0a16',b:'#ff5a5f',g:'rgba(206,17,38,.35)',d:'#ce1126'};SK.fl_w={a:'#9aa0a6',b:'#ffffff',g:'rgba(255,255,255,.3)',d:'#f1f1f1'};SK.fl_k={a:'#8a8f98',b:'#4b5563',g:'rgba(160,160,170,.3)',d:'#1b1b1f'};SK.fl_b={a:'#1e3a8a',b:'#9db8ff',g:'rgba(60,90,220,.4)',d:'#2f5bd8'};SK.fl_g={a:'#8a6a00',b:'#fff1a8',g:'rgba(255,200,0,.4)',d:'#e0a800'};
 const AC=['rgba(255,0,127,.85)','rgba(255,230,0,.85)','rgba(0,255,110,.85)'];
@@ -317,14 +313,13 @@ function body(c,S,p,sw,open,carry,hs,crown,attn){const AX=[3.2,1.4,-.6],FX=[5.2,
  if(carry){c.fillStyle=S.b;c.beginPath();c.arc(9.4,0,1.5,0,6.3);c.fill()}
  if(crown){c.strokeStyle='#fde047';c.lineWidth=1;c.beginPath();c.arc(5.2,0,2.9,0,6.3);c.moveTo(6.4,-2.4);c.lineTo(7.8,-3.8);c.moveTo(7.6,0);c.lineTo(9.2,0);c.moveTo(6.4,2.4);c.lineTo(7.8,3.8);c.stroke()}}
 const SPR={};
-function drawWeapon(a,scale){if(!weapons)return;const kind=Math.abs(a.i)%3,swing=mode==='attack'&&a.hs?Math.sin(FR*.7+a.pi)*.5:0;cx.save();cx.translate(a.x,a.y);cx.rotate(a.ang+swing);cx.scale(scale,scale);cx.lineCap='round';cx.lineJoin='round';if(kind===0){cx.strokeStyle='#a16207';cx.lineWidth=1.6;cx.beginPath();cx.moveTo(1,-1);cx.lineTo(4,-4);cx.stroke();cx.strokeStyle='#e2e8f0';cx.lineWidth=2;cx.beginPath();cx.moveTo(3,-4);cx.lineTo(9,-10);cx.lineTo(12,-13);cx.stroke();cx.fillStyle='#f8fafc';cx.beginPath();cx.moveTo(9,-10);cx.lineTo(13,-15);cx.lineTo(11,-9);cx.fill()}else if(kind===1){cx.strokeStyle='#a16207';cx.lineWidth=1.7;cx.beginPath();cx.moveTo(0,-2);cx.lineTo(10,-12);cx.stroke();cx.fillStyle='#cbd5e1';cx.strokeStyle='#f8fafc';cx.lineWidth=1;cx.beginPath();cx.moveTo(8,-10);cx.lineTo(12,-17);cx.lineTo(11,-9);cx.closePath();cx.fill();cx.stroke()}else{cx.fillStyle='#475569';cx.fillRect(2,-6,7,4);cx.fillStyle='#94a3b8';cx.fillRect(8,-5,3,2);cx.fillStyle='#fbbf24';cx.fillRect(3,-7,2,1);if(mode==='attack'&&a.hs&&Math.sin(FR*.7+a.pi)>0){cx.strokeStyle='rgba(34,211,238,.9)';cx.lineWidth=1.5;cx.beginPath();cx.moveTo(11,-4);cx.lineTo(18,-4);cx.stroke()}}cx.restore()}
 function spr(sk,v,fr){const key=sk+v+fr;let c=SPR[key];if(c)return c;c=SPR[key]=document.createElement('canvas');c.width=c.height=48;const g=c.getContext('2d');g.translate(24,24);g.scale(1.1,1.1);body(g,SK[sk],fr<0?0:fr/12*6.2832,fr<0?0:1,v===1||v===2,v===1,v===3,false,v===4);return c}
 function drawAnt(a){let al=1;if(stealth)al=D(a.x-M.x,a.y-M.y)<130?1:.08;const s3=map3d&&a.p3&&a.fx!=null?a.zs:1;if(s3!==1)al*=.55+.45*Math.min(1,Math.max(0,(s3-.86)/.3));const sk=a.fk&&a.fx!=null?a.fk:skin,S=SK[sk],cp=a.dieAt?Math.max(0,Math.min(1,(performance.now()-a.crushAt)/CRUSH_VIS_MS)):0,sx=1+.18*cp,sy=1-.82*cp;cx.globalAlpha=al;if(a.dieAt&&performance.now()>=a.crushAt){cx.globalAlpha=al*(1-cp);cx.fillStyle='rgba(255,40,40,.42)';cx.beginPath();cx.arc(a.x,a.y,6+3*cp,0,6.3);cx.fill();cx.globalAlpha=al}
   if(a.lk||a.i===0||a.hs||(stealth&&al===1)){cx.fillStyle=a.hs?'rgba(255,40,40,.3)':mode==='anim'?'rgba(0,245,212,.8)':(a.ac&&a.fx!=null?a.ac:S.g);cx.beginPath();cx.arc(a.x,a.y,a.i===0?11:a.lk?7:5,0,6.3);cx.fill()}
   const ag=a.ang,c=Math.cos(ag),n=Math.sin(ag),v=D(a.vx,a.vy);
-  if(a.i===0){cx.setTransform(c*1.5*sx,n*1.5*sx,-n*1.5*sy,c*1.5*sy,a.x,a.y);body(cx,S,a.ph,Math.min(1,v/1.2),a.carry||a.eat,a.carry,a.hs,true,mode==='attn');cx.setTransform(1,0,0,1,0,0);cx.globalAlpha=al;drawWeapon(a,s3*1.65);return}
+  if(a.i===0){cx.setTransform(c*1.5*sx,n*1.5*sx,-n*1.5*sy,c*1.5*sy,a.x,a.y);body(cx,S,a.ph,Math.min(1,v/1.2),a.carry||a.eat,a.carry,a.hs,true,mode==='attn');cx.setTransform(1,0,0,1,0,0);cx.globalAlpha=al;return}
  const mvg=v>.35&&mode!=='attn',fr=mvg?((((a.ph%6.2832)+6.2832)%6.2832)/6.2832*12|0):-1,vr=mode==='attn'?4:a.hs?3:a.carry?1:a.eat?2:0;
-   const q3=s3;cx.setTransform(c*q3*sx,n*q3*sx,-n*q3*sy,c*q3*sy,a.x,a.y);cx.drawImage(spr(sk,vr,fr),-24,-24);cx.setTransform(1,0,0,1,0,0);drawWeapon(a,q3*1.1)}
+   const q3=s3;cx.setTransform(c*q3*sx,n*q3*sx,-n*q3*sy,c*q3*sy,a.x,a.y);cx.drawImage(spr(sk,vr,fr),-24,-24);cx.setTransform(1,0,0,1,0,0)}
 function draw(){const S=SK[skin];
  hills.forEach(h=>{const g=cx.createRadialGradient(h[0],h[1],4,h[0],h[1],70);g.addColorStop(0,'#000');g.addColorStop(.35,'rgba(70,48,34,.9)');g.addColorStop(1,'rgba(70,48,34,0)');cx.fillStyle=g;cx.beginPath();cx.arc(h[0],h[1],70,0,6.3);cx.fill()});
  
@@ -355,8 +350,9 @@ function loop(t){
  if(mode==='attack'&&touch>=25&&t-lastTr>3500){lastTr=t;shake();cpt={x:M.x,y:M.y,e:'',r:24,need:25,cl:0,n:0,cn:0,mv:false,dead:0,cap:1};heavies.push(cpt);M.down=false;snd.hum(false);cv.style.cursor='none';setMode('free','Cursor dragged to the nest 🕳️');toast('Commander surrounded! The ants are carrying your cursor to the nest 😂')}
  draw();requestAnimationFrame(loop)}
 
-function panelInset(){const d=$('#deck');if(innerWidth<=640||document.body.classList.contains('cine'))return 0;return d.offsetHeight+(parseFloat(getComputedStyle(d).bottom)||0)+8}
-function resize(){W=cv.width=innerWidth;H=Math.max(240,innerHeight-panelInset());cv.height=H;cv.style.height=H+'px';GW=Math.ceil(W/GC);GH=Math.ceil(H/GC);G=new Float32Array(GW*GH);hills=[[60,165],[W-60,165],[60,H-120],[W-60,H-120]];const m=Math.min(W,H);RR=[m*.16,m*.25,m*.34];mg=Math.min(170,W*.28,H*.28);if(mode==='form'&&refm)refm()}
+function panelInset(){const d=$('#deck');if(innerWidth<=640||!document.body.classList.contains('controls-open'))return 0;return d.offsetHeight+(parseFloat(getComputedStyle(d).bottom)||0)+8}
+function positionControlsButton(){const b=$('#tg2'),d=$('#deck');if(innerWidth<=640||!document.body.classList.contains('controls-open')){b.style.bottom='';return}b.style.bottom=(d.offsetHeight+(parseFloat(getComputedStyle(d).bottom)||0)+8)+'px'}
+function resize(){W=cv.width=innerWidth;H=Math.max(240,innerHeight-panelInset());cv.height=H;cv.style.height=H+'px';GW=Math.ceil(W/GC);GH=Math.ceil(H/GC);G=new Float32Array(GW*GH);hills=[[60,165],[W-60,165],[60,H-120],[W-60,H-120]];const m=Math.min(W,H);RR=[m*.16,m*.25,m*.34];mg=Math.min(170,W*.28,H*.28);positionControlsButton();if(mode==='form'&&refm)refm()}
 addEventListener('resize',resize);resize();
 if('ResizeObserver' in window)new ResizeObserver(()=>resize()).observe($('#deck'));
 ants=Array.from({length:innerWidth<700?320:520},(_,i)=>new Ant(i));hud();
@@ -371,8 +367,7 @@ cv.addEventListener('pointerleave',e=>{if(!M.down&&!cpt){M.x=M.y=-999}});
 document.addEventListener('pointerdown',()=>snd.init());
 const TT={pher:'Draw a pheromone trail and watch the column! 🖌️',food:'Click to drop food 🍰',heist:'Click to drop heavy loot 📦',attack:'The soldiers attack the cursor! 🎯',vortex:'Hold click for the vortex 🌀',kill:'Click or drag over ants to squash them 👣'};
 $('#tools').addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(!b)return;tool=b.dataset.t;document.querySelectorAll('[data-t]').forEach(x=>x.classList.toggle('on',x===b));
- if(tool==='attack')setMode('attack','Attack cursor');else if(mode==='attack')setMode('free','Free');if(tool==='vortex')snd.blip();toast(tool==='attack'&&weapons?'Armed ants are swinging their weapons at the cursor! 🎯⚔️':TT[tool])});
-$('#arm').onclick=()=>{weapons=!weapons;const b=$('#arm');b.classList.toggle('on',weapons);b.setAttribute('aria-pressed',String(weapons));b.textContent=weapons?'⚔️ Weapons: On':'⚔️ Arm ants';toast(weapons?'The ants are armed with swords, spears, and blasters. Attack the cursor to see them strike! ⚔️':'The ants stored their weapons.')};
+ if(tool==='attack')setMode('attack','Attack cursor');else if(mode==='attack')setMode('free','Free');if(tool==='vortex')snd.blip();toast(TT[tool])});
 $('#skins').addEventListener('click',e=>{const b=e.target.closest('[data-s]');if(!b)return;skin=b.dataset.s;document.querySelectorAll('[data-s]').forEach(x=>x.classList.toggle('on',x===b));toast('Squad skin changed! 🎖️')});
 $('#bw').onclick=()=>{const s=$('#txt').value.trim();if(s)form(s,false,'Formation: '+s)};
 $('#txt').addEventListener('keydown',e=>{if(e.key==='Enter')$('#bw').click()});
@@ -393,11 +388,10 @@ document.querySelectorAll('[data-an]').forEach(b=>b.onclick=()=>{const k=b.datas
 $('#bd').onclick=countdown;
 $('#bk').onclick=()=>{G.fill(0);foods=[];heavies=[];crumbs=[];trail=[];hadCr=false;toast('Arena cleared 🧹')};
 $('#mute').onclick=()=>{snd.mute=!snd.mute;$('#mute').textContent=snd.mute?'🔇':'🔊';if(snd.mute){snd.hum(false);drums(false)}else if(mode==='parade')drums(true)};
-function cine(){document.body.classList.toggle('cine');resize();if(document.body.classList.contains('cine'))document.activeElement&&document.activeElement.blur()}
-function togglePanels(){if(innerWidth<=640){const open=document.body.classList.toggle('mobile-controls');$('#tg2').setAttribute('aria-expanded',String(open));$('#tg2').setAttribute('aria-label',open?'Close controls':'Open controls');$('#tg2').textContent=open?'✕ Close':'🎛️ Controls';if(!open)document.activeElement&&document.activeElement.blur()}else cine()}
-$('#tg').onclick=cine;$('#tg2').onclick=togglePanels;
-addEventListener('keydown',e=>{if(e.target.id==='txt')return;if(e.key==='h'||e.key==='H'||(e.key==='Escape'&&document.body.classList.contains('cine')))cine()});
-addEventListener('keydown',e=>{if(e.code==='Space'&&e.target.tagName!=='INPUT'){e.preventDefault();if(!e.repeat)attn()}else if(e.key==='Escape'){if(document.body.classList.contains('mobile-controls'))togglePanels();else $('#bf').click()}});
+function togglePanels(){const open=document.body.classList.toggle('controls-open');$('#tg2').setAttribute('aria-expanded',String(open));$('#tg2').setAttribute('aria-label',open?'Close controls':'Open controls');$('#tg2').textContent=open?'✕ Hide controls':'🎛️ Controls';resize();if(!open)document.activeElement&&document.activeElement.blur()}
+$('#tg2').onclick=togglePanels;
+addEventListener('keydown',e=>{if(e.target.id==='txt')return;if(e.key==='h'||e.key==='H')togglePanels()});
+addEventListener('keydown',e=>{if(e.code==='Space'&&e.target.tagName!=='INPUT'){e.preventDefault();if(!e.repeat)attn()}else if(e.key==='Escape'){if(document.body.classList.contains('controls-open'))togglePanels();else $('#bf').click()}});
 addEventListener('keyup',e=>{if(e.code==='Space'&&e.target.tagName!=='INPUT')e.preventDefault()});
 toast('Squad ready, sir! Type a word or press Space for attention');
 requestAnimationFrame(loop);
