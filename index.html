@@ -215,7 +215,7 @@ function upd(a){
  let tx=0,ty=0,mx=2.4,ad=70,tg=0,sp=0,tr=0;const fm=mode==='form'||mode==='clock';a.lk=false;a.hs=false;a.eat=0;
  if(mode==='rally'){if(a.rx==null||a.ry==null)rankTargets();tx=a.rx;ty=a.ry;tg=1;mx=18;ad=150}
   else if(fm){if(a.fx!=null){tx=a.fx;ty=a.fy;tg=1;mx=7}}
- else if(mode==='parade'){const p=PP(pS-(a.i?a.rw*17:-17)),c=a.i?(a.cl-3.5)*14:0;tx=p.x+p.nx*c;ty=p.y+p.ny*c;tg=1;mx=9}
+ else if(mode==='parade'){const p=PP(pS-(a.i?a.rw*17:0)),c=a.i?(a.cl-3.5)*14:0;tx=p.x+p.nx*c;ty=p.y+p.ny*c;tg=1;mx=9}
  else if(mode==='anim'){const p=anim(a);tx=p[0];ty=p[1];mx=p[2];tg=1;ad=40;a.lk=!!p[3]}
  else if(mode==='attack'){tx=M.x;ty=M.y;tg=1;mx=4.5;a.hs=true;sp=1;if(M.x>0&&D(a.x-M.x,a.y-M.y)<34)touch++}
  else{
