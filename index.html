@@ -40,13 +40,13 @@ h1{margin:0;font-family:'Changa',sans-serif;font-weight:800;font-size:1.05rem;ba
 .sep{width:1px;height:20px;background:rgba(255,255,255,.1)}
 #toast{position:fixed;top:calc(170px + env(safe-area-inset-top,0px));left:50%;transform:translate(-50%,16px) scale(.9);z-index:10;background:rgba(16,18,27,.92);border:1px solid rgba(255,183,3,.6);color:#fde68a;font-weight:700;padding:8px 18px;border-radius:14px;box-shadow:0 8px 28px rgba(224,122,95,.35);opacity:0;pointer-events:none;transition:.3s cubic-bezier(.22,1,.36,1);text-align:center;max-width:92vw}
 #toast.on{opacity:1;transform:translate(-50%,0) scale(1)}
-#deck{position:fixed;bottom:calc(.6rem + env(safe-area-inset-bottom,0px));left:.6rem;right:.6rem;max-width:72rem;margin:0 auto;z-index:20;display:none;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;justify-content:space-between;padding:.55rem .75rem;max-height:40vh;overflow:auto}
-body.controls-open #deck{display:flex}
+#deck{position:fixed;bottom:calc(.6rem + env(safe-area-inset-bottom,0px));left:.6rem;right:.6rem;max-width:72rem;margin:0 auto;z-index:20;display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;justify-content:space-between;padding:.55rem .75rem;max-height:40vh;overflow:auto;transform:translateY(calc(100% + 1rem));opacity:0;visibility:hidden;pointer-events:none;transition:transform .2s ease,opacity .15s ease,visibility 0s linear .2s}
+body.controls-open #deck{transform:translateY(0);opacity:1;visibility:visible;pointer-events:auto;transition:transform .2s ease,opacity .15s ease,visibility 0s}
 #commands{display:flex;align-items:center;gap:.5rem;width:100%;padding-bottom:.45rem;border-bottom:1px solid rgba(255,255,255,.08)}
 #commands>#txt{flex:0 1 190px;min-width:150px}
 #commands .in{flex:1}
-#tg2{position:fixed;right:.65rem;bottom:calc(.65rem + env(safe-area-inset-bottom,0px));z-index:30;opacity:1;pointer-events:auto;transition:opacity .3s}
-@media(prefers-reduced-motion:reduce){#tg2{transition:none!important}}
+#tg2{position:fixed;right:.65rem;bottom:calc(.65rem + env(safe-area-inset-bottom,0px));z-index:30;opacity:1;pointer-events:auto;transition:opacity .2s,bottom .2s ease}
+@media(prefers-reduced-motion:reduce){#deck,#tg2{transition:none!important}}
 .fg{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
 .fg>span{font-size:.7rem;color:#94a3b8;font-weight:600}
 @media(max-width:640px){
@@ -58,8 +58,7 @@ body.controls-open #deck{display:flex}
  .cn{flex:1;min-width:0;justify-content:center;gap:4px;padding:4px 5px}
  .cn small{font-size:.52rem;white-space:normal;text-align:center;line-height:1.05}.cn b{font-size:.82rem}.cn>span{font-size:.85rem}
  #mute{padding:5px 8px}
- #deck{display:none;left:.45rem;right:.45rem;bottom:calc(4.2rem + env(safe-area-inset-bottom,0px));width:auto;max-width:none;max-height:68vh;max-height:min(68dvh,620px);padding:.6rem;gap:.65rem;flex-direction:column;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start;overflow:auto;overscroll-behavior:contain}
- body.controls-open #deck{display:flex}
+ #deck{left:.45rem;right:.45rem;bottom:calc(4.2rem + env(safe-area-inset-bottom,0px));width:auto;max-width:none;max-height:68vh;max-height:min(68dvh,620px);padding:.6rem;gap:.65rem;flex-direction:column;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start;overflow:auto;overscroll-behavior:contain}
  #commands{display:flex;flex-direction:column;align-items:stretch;gap:.45rem;padding-bottom:.6rem}
  #commands>#txt{flex:0 0 auto;width:100%;min-width:0}
  #commands .in{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:.4rem}
@@ -86,7 +85,7 @@ body.controls-open #deck{display:flex}
 </header>
 <button class="gb" id="tg2" aria-label="Open controls" aria-expanded="false">🎛️ Controls</button>
 <div id="toast" role="status"></div>
-<footer id="deck" class="gp">
+<footer id="deck" class="gp" aria-hidden="true" inert>
  <div id="commands"><input id="txt" value="ANT ARMY" maxlength="24" aria-label="Text" placeholder="Type a word for the ants to form (e.g. GG, 404)...">
   <div class="in">
    <button class="gb cy" id="bw">Form with ants 🐜✍️</button>
@@ -387,7 +386,7 @@ document.querySelectorAll('[data-an]').forEach(b=>b.onclick=()=>{const k=b.datas
 $('#bd').onclick=countdown;
 $('#bk').onclick=()=>{G.fill(0);foods=[];heavies=[];crumbs=[];trail=[];hadCr=false;toast('Arena cleared 🧹')};
 $('#mute').onclick=()=>{snd.mute=!snd.mute;$('#mute').textContent=snd.mute?'🔇':'🔊';if(snd.mute){snd.hum(false);drums(false)}else if(mode==='parade')drums(true)};
-function togglePanels(){const open=document.body.classList.toggle('controls-open');$('#tg2').setAttribute('aria-expanded',String(open));$('#tg2').setAttribute('aria-label',open?'Close controls':'Open controls');$('#tg2').textContent=open?'✕ Hide controls':'🎛️ Controls';requestAnimationFrame(positionControlsButton);if(!open)document.activeElement&&document.activeElement.blur()}
+function togglePanels(){const open=document.body.classList.toggle('controls-open'),d=$('#deck');d.inert=!open;d.setAttribute('aria-hidden',String(!open));$('#tg2').setAttribute('aria-expanded',String(open));$('#tg2').setAttribute('aria-label',open?'Close controls':'Open controls');$('#tg2').textContent=open?'✕ Hide controls':'🎛️ Controls';requestAnimationFrame(positionControlsButton);if(!open)document.activeElement&&document.activeElement.blur()}
 $('#tg2').onclick=togglePanels;
 addEventListener('keydown',e=>{if(e.target.id==='txt')return;if(e.key==='h'||e.key==='H')togglePanels()});
 addEventListener('keydown',e=>{if(e.code==='Space'&&e.target.tagName!=='INPUT'){e.preventDefault();if(!e.repeat)attn()}else if(e.key==='Escape'){if(document.body.classList.contains('controls-open'))togglePanels();else $('#bf').click()}});
