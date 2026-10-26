@@ -41,6 +41,9 @@ h1{margin:0;font-family:'Changa',sans-serif;font-weight:800;font-size:1.05rem;ba
 #toast{position:fixed;top:calc(170px + env(safe-area-inset-top,0px));left:50%;transform:translate(-50%,16px) scale(.9);z-index:10;background:rgba(16,18,27,.92);border:1px solid rgba(255,183,3,.6);color:#fde68a;font-weight:700;padding:8px 18px;border-radius:14px;box-shadow:0 8px 28px rgba(224,122,95,.35);opacity:0;pointer-events:none;transition:.3s cubic-bezier(.22,1,.36,1);text-align:center;max-width:92vw}
 #toast.on{opacity:1;transform:translate(-50%,0) scale(1)}
 #deck{position:fixed;bottom:calc(.6rem + env(safe-area-inset-bottom,0px));left:.6rem;right:.6rem;max-width:72rem;margin:0 auto;z-index:20;display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;justify-content:space-between;padding:.55rem .75rem;max-height:40vh;overflow:auto}
+#commands{display:flex;align-items:center;gap:.5rem;width:100%;padding-bottom:.45rem;border-bottom:1px solid rgba(255,255,255,.08)}
+#commands>#txt{flex:0 1 190px;min-width:150px}
+#commands .in{flex:1}
 #hd,#deck{transition:transform .6s cubic-bezier(.22,1,.36,1),opacity .5s ease,visibility 0s}
 body.cine #hd{transform:translateY(-140%);opacity:0;visibility:hidden;pointer-events:none;transition:transform .6s cubic-bezier(.22,1,.36,1),opacity .5s ease,visibility 0s .6s}
 body.cine #deck{transform:translateY(140%);opacity:0;visibility:hidden;pointer-events:none;transition:transform .6s cubic-bezier(.22,1,.36,1),opacity .5s ease,visibility 0s .6s}
@@ -49,7 +52,28 @@ body.cine #tg2{pointer-events:auto}body.cine #tg2:hover,body.cine #tg2:focus-vis
 @media(prefers-reduced-motion:reduce){#hd,#deck{transition:none!important}}
 .fg{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
 .fg>span{font-size:.7rem;color:#94a3b8;font-weight:600}
-@media(max-width:640px){.sub{display:none}#toast{top:calc(200px + env(safe-area-inset-top,0px))}}
+@media(max-width:640px){
+ #hd{top:calc(.35rem + env(safe-area-inset-top,0px));left:.4rem;right:.4rem;gap:.25rem}
+ .row{gap:.35rem;padding:.35rem .5rem}
+ .br{gap:.4rem}.lg{width:34px;height:34px;font-size:1.25rem}h1{font-size:1rem}.bd{font-size:.62rem;padding:0 7px}
+ .sub,#tg{display:none}
+ .cs{width:100%;gap:.25rem}
+ .cn{flex:1;min-width:0;justify-content:center;gap:4px;padding:4px 5px}
+ .cn small{font-size:.52rem;white-space:normal;text-align:center;line-height:1.05}.cn b{font-size:.82rem}.cn>span{font-size:.85rem}
+ #mute{padding:5px 8px}
+ #deck{display:none;left:.45rem;right:.45rem;bottom:calc(4.2rem + env(safe-area-inset-bottom,0px));width:auto;max-width:none;max-height:68vh;max-height:min(68dvh,620px);padding:.6rem;gap:.65rem;flex-direction:column;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start;overflow:auto;overscroll-behavior:contain}
+ body.mobile-controls #deck{display:flex}
+ #commands{display:flex;flex-direction:column;align-items:stretch;gap:.45rem;padding-bottom:.6rem}
+ #commands>#txt{flex:0 0 auto;width:100%;min-width:0}
+ #commands .in{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:.4rem}
+ #commands .in .sep{display:none}
+ #commands .in .gb{white-space:normal;min-height:40px}
+ .fg{gap:.35rem;align-items:center}.fg>span{width:100%;font-size:.68rem}
+ .fg .gb{padding:7px 9px;font-size:.7rem}
+ #tg2{top:auto;right:.65rem;bottom:calc(.55rem + env(safe-area-inset-bottom,0px));opacity:1;pointer-events:auto;z-index:31}
+ #tg2:hover,#tg2:focus-visible{opacity:1}
+ #toast{top:calc(105px + env(safe-area-inset-top,0px));max-width:88vw;padding:6px 12px}
+}
 </style></head><body>
 <canvas id="cv"></canvas>
 <header id="hd">
@@ -62,8 +86,11 @@ body.cine #tg2{pointer-events:auto}body.cine #tg2:hover,body.cine #tg2:focus-vis
    <button class="gb am" id="mute" aria-label="Mute sound">🔊</button><button class="gb" id="tg" aria-label="Show or hide panel">🎛️ Panel</button>
   </div>
  </div>
- <div class="gp row" style="justify-content:stretch">
-  <input id="txt" value="ANT ARMY" maxlength="24" aria-label="Text" placeholder="Type a word for the ants to form (e.g. GG, 404)...">
+</header>
+<button class="gb" id="tg2" aria-label="Open controls" aria-expanded="false">🎛️ Controls</button>
+<div id="toast" role="status"></div>
+<footer id="deck" class="gp">
+ <div id="commands"><input id="txt" value="ANT ARMY" maxlength="24" aria-label="Text" placeholder="Type a word for the ants to form (e.g. GG, 404)...">
   <div class="in">
    <button class="gb cy" id="bw">Form with ants 🐜✍️</button>
    <button class="gb ro" id="bx">Detonate formation! 💥🔥</button>
@@ -77,10 +104,6 @@ body.cine #tg2{pointer-events:auto}body.cine #tg2:hover,body.cine #tg2:focus-vis
    <button class="gb" id="bf">Free 🕊️</button>
   </div>
  </div>
-</header>
-<button class="gb" id="tg2" aria-label="Restore panels">🎛️ Panel</button>
-<div id="toast" role="status"></div>
-<footer id="deck" class="gp">
  <div class="fg" id="tools"><span>Mouse tools:</span>
   <button class="gb" data-t="pher">🖌️ Pheromones</button><button class="gb on" data-t="food">🍰 Drop food</button><button class="gb" data-t="heist">🍕📦 Heist</button><button class="gb" data-t="attack">🎯 Attack cursor</button><button class="gb" data-t="vortex">🌀 Vortex</button><button class="gb ro" data-t="kill">👣 Squash ants</button><button class="gb cy" id="br">🎖️ +100 reinforcements</button><button class="gb ro" id="bk">🧹 Clear</button></div>
  <div class="fg" id="fms"><span>Tactical formations:</span><button class="gb" data-an="spear">📐 V-Spearhead</button><button class="gb" data-an="pincer">🦂 Pincer</button><button class="gb" data-an="square">🏰 Hollow square</button><button class="gb" data-an="wave">🌊 Stadium wave</button><button class="gb cy" data-an="heart">💓 Pulsing heart</button><button class="gb cy" data-an="inf">♾️ Infinity</button><button class="gb cy" data-an="eq">📊 Equalizer</button><button class="gb am" data-sh="👑|Royal crown">👑 Royal crown</button><button class="gb ro" id="bd">⏱️ Countdown 3-2-1-GO</button></div>
@@ -140,7 +163,7 @@ function ph(x,y){return x<0||y<0||x>=W||y>=H?0:G[(y/GC|0)*GW+(x/GC|0)]}
 let NF=null,NFD=1e9;function nearF(a){NF=null;NFD=1e9;for(const g of foods){const d=D(a.x-g.x,a.y-g.y);if(d<NFD){NFD=d;NF=g}}return NFD<650}
 function spawnAnt(){if(ants.length>=800)return;const a=new Ant(1+(R()*1e6|0)),h=hills[R()*4|0];a.x=h[0]+(R()-.5)*16;a.y=h[1]+(R()-.5)*16;a.wa=a.ang=Math.atan2(H/2-a.y,W/2-a.x);a.vx=Math.cos(a.wa)*1.5;a.vy=Math.sin(a.wa)*1.5;ants.push(a);if(mode==='rally'||mode==='attn'){rankTargets();if(mode==='attn'){a.x=a.rx;a.y=a.ry;a.vx=a.vy=0;a.ang=-1.5708;a.lk=true}}hud()}
 function RP(u,hw,hh){let s=u*4*(hw+hh),x,y;if(s<2*hw){x=-hw+s;y=-hh}else if((s-=2*hw)<2*hh){x=hw;y=-hh+s}else if((s-=2*hh)<2*hw){x=hw-s;y=hh}else{s-=2*hw;x=-hw;y=hh-s}return[W/2+x,H/2+y]}
-function rankTargets(){const n=ants.length,cols=Math.max(1,Math.min(Math.ceil(Math.sqrt(n*W/Math.max(1,H))),Math.floor((W-36)/12))),rows=Math.ceil(n/cols),gap=Math.max(9,Math.min(18,(W-36)/cols,(H-80)/rows)),cy=H*.52;ants.forEach((a,i)=>{const row=(i/cols)|0,col=i%cols,count=Math.min(cols,n-row*cols);a.rx=W/2+(col-(count-1)/2)*gap;a.ry=cy+(row-(rows-1)/2)*gap})}
+function rankTargets(){if(!ants.length)return;let king=ants.find(a=>a.i===0);if(!king){king=ants[0];king.i=0}const soldiers=ants.filter(a=>a!==king),n=soldiers.length,cols=Math.max(1,Math.min(Math.ceil(Math.sqrt(Math.max(1,n)*W/Math.max(1,H))),Math.floor((W-36)/12))),rows=Math.max(1,Math.ceil(n/cols)),headerBottom=$('#hd')?.getBoundingClientRect().bottom||0,topSafe=Math.max(90,Math.min(H-80,headerBottom+16)),bottomSafe=40,gap=Math.max(3,Math.min(18,(W-36)/cols,(H-topSafe-bottomSafe)/(rows+.5))),minCy=topSafe+((rows-1)/2+1.5)*gap,maxCy=H-bottomSafe-((rows-1)/2)*gap,cy=Math.min(maxCy,Math.max(minCy,H*.55));king.rx=W/2;king.ry=cy-((rows-1)/2+1.5)*gap;soldiers.forEach((a,i)=>{const row=(i/cols)|0,col=i%cols,count=Math.min(cols,n-row*cols);a.rx=W/2+(col-(count-1)/2)*gap;a.ry=cy+(row-(rows-1)/2)*gap})}
 function animPre(){const tx=M.x>0?M.x:W/2,ty=M.y>0?M.y:H/2,dx=tx-SP.x,dy=ty-SP.y;if(D(dx,dy)>6){let d=Math.atan2(dy,dx)-hd;d=Math.atan2(Math.sin(d),Math.cos(d));hd+=d*.08}SP.x+=dx*.05;SP.y+=dy*.05;beat*=.93}
 function anim(a){const n=ants.length,i=a.ai,t=FR;let x=W/2,y=H/2,mx=8,lk=0;
  if(AN==='spear'){if(i===0){x=SP.x;y=SP.y;lk=1}else{const r=(i-1)>>1,sd=i%2?1:-1,q=r>>2,c=r&3,bk=q*9+c*3+10,lt=q*6+c*3+4,fx=Math.cos(hd),fy=Math.sin(hd);x=SP.x-fx*bk-fy*lt*sd;y=SP.y-fy*bk+fx*lt*sd}mx=12}
@@ -328,7 +351,7 @@ function loop(t){
  if(mode==='attack'&&touch>=25&&t-lastTr>3500){lastTr=t;shake();cpt={x:M.x,y:M.y,e:'',r:24,need:25,cl:0,n:0,cn:0,mv:false,dead:0,cap:1};heavies.push(cpt);M.down=false;snd.hum(false);cv.style.cursor='none';setMode('free','Cursor dragged to the nest 🕳️');toast('Commander surrounded! The ants are carrying your cursor to the nest 😂')}
  draw();requestAnimationFrame(loop)}
 
-function panelInset(){const d=$('#deck');if(document.body.classList.contains('cine'))return 0;return d.offsetHeight+(parseFloat(getComputedStyle(d).bottom)||0)+8}
+function panelInset(){const d=$('#deck');if(innerWidth<=640||document.body.classList.contains('cine'))return 0;return d.offsetHeight+(parseFloat(getComputedStyle(d).bottom)||0)+8}
 function resize(){W=cv.width=innerWidth;H=Math.max(240,innerHeight-panelInset());cv.height=H;cv.style.height=H+'px';GW=Math.ceil(W/GC);GH=Math.ceil(H/GC);G=new Float32Array(GW*GH);hills=[[60,165],[W-60,165],[60,H-120],[W-60,H-120]];const m=Math.min(W,H);RR=[m*.16,m*.25,m*.34];mg=Math.min(170,W*.28,H*.28);if(mode==='form'&&refm)refm()}
 addEventListener('resize',resize);resize();
 if('ResizeObserver' in window)new ResizeObserver(()=>resize()).observe($('#deck'));
@@ -366,9 +389,10 @@ $('#bd').onclick=countdown;
 $('#bk').onclick=()=>{G.fill(0);foods=[];heavies=[];crumbs=[];trail=[];hadCr=false;toast('Arena cleared 🧹')};
 $('#mute').onclick=()=>{snd.mute=!snd.mute;$('#mute').textContent=snd.mute?'🔇':'🔊';if(snd.mute){snd.hum(false);drums(false)}else if(mode==='parade')drums(true)};
 function cine(){document.body.classList.toggle('cine');resize();if(document.body.classList.contains('cine'))document.activeElement&&document.activeElement.blur()}
-$('#tg').onclick=cine;$('#tg2').onclick=cine;
+function togglePanels(){if(innerWidth<=640){const open=document.body.classList.toggle('mobile-controls');$('#tg2').setAttribute('aria-expanded',String(open));$('#tg2').setAttribute('aria-label',open?'Close controls':'Open controls');$('#tg2').textContent=open?'✕ Close':'🎛️ Controls';if(!open)document.activeElement&&document.activeElement.blur()}else cine()}
+$('#tg').onclick=cine;$('#tg2').onclick=togglePanels;
 addEventListener('keydown',e=>{if(e.target.id==='txt')return;if(e.key==='h'||e.key==='H'||(e.key==='Escape'&&document.body.classList.contains('cine')))cine()});
-addEventListener('keydown',e=>{if(e.code==='Space'&&e.target.tagName!=='INPUT'){e.preventDefault();if(!e.repeat)attn()}else if(e.key==='Escape')$('#bf').click()});
+addEventListener('keydown',e=>{if(e.code==='Space'&&e.target.tagName!=='INPUT'){e.preventDefault();if(!e.repeat)attn()}else if(e.key==='Escape'){if(document.body.classList.contains('mobile-controls'))togglePanels();else $('#bf').click()}});
 addEventListener('keyup',e=>{if(e.code==='Space'&&e.target.tagName!=='INPUT')e.preventDefault()});
 toast('Squad ready, sir! Type a word or press Space for attention');
 requestAnimationFrame(loop);
