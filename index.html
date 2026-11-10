@@ -2,11 +2,11 @@
 <html lang="en" dir="ltr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Anty</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Changa:wght@600;800&display=swap" rel="stylesheet">
+<script src="https://sdk.crazygames.com/crazygames-sdk-v3.js"></script>
 <style>
 :root{color-scheme:dark;--ter:#e07a5f;--ter7:#8f301b;--gold:#ffb703;--cy:#00f5d4}
 *{box-sizing:border-box;user-select:none;-webkit-user-select:none}
-html,body{height:100%;margin:0;overflow:hidden;background:#090a0f;color:#f1f5f9;font-family:'Cairo',sans-serif}
+html,body{height:100%;margin:0;overflow:hidden;background:#090a0f;color:#f1f5f9;font-family:'Segoe UI',Tahoma,Arial,sans-serif}
 body{background-size:45px 45px;background-image:linear-gradient(to right,rgba(224,122,95,.05) 1px,transparent 1px),linear-gradient(to bottom,rgba(0,245,212,.04) 1px,transparent 1px)}
 @keyframes gs{0%,100%{background-position:0 50%}50%{background-position:100% 50%}}
 @keyframes shk{0%,100%{transform:none}20%{transform:translate(-9px,5px)}40%{transform:translate(8px,-6px)}60%{transform:translate(-6px,-4px)}80%{transform:translate(5px,6px)}}
@@ -18,14 +18,14 @@ body{background-size:45px 45px;background-image:linear-gradient(to right,rgba(22
 .row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem;padding:.5rem .85rem}
 .br{display:flex;align-items:center;gap:.65rem}
 .lg{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#e07a5f,#d97706 50%,#8f301b);border:1px solid rgba(251,191,36,.4);display:flex;align-items:center;justify-content:center;font-size:1.5rem;box-shadow:0 4px 14px rgba(208,90,63,.3)}
-h1{margin:0;font-family:'Changa',sans-serif;font-weight:800;font-size:1.05rem;background:linear-gradient(to left,#fcd34d,#e07a5f,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}
+h1{margin:0;font-family:'Segoe UI',Tahoma,Arial,sans-serif;font-weight:800;font-size:1.05rem;background:linear-gradient(to left,#fcd34d,#e07a5f,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}
 .bd{display:inline-flex;gap:4px;align-items:center;font-size:.7rem;font-weight:700;padding:1px 10px;border-radius:99px;background:rgba(245,158,11,.2);border:1px solid rgba(251,191,36,.5);color:#fcd34d;margin-inline-start:8px}
 .sub{font-size:.7rem;color:#94a3b8;margin:0}
 .cs{display:flex;align-items:center;gap:.5rem}
 .cn{display:flex;align-items:center;gap:6px;background:rgba(15,23,42,.8);border:1px solid rgba(245,158,11,.3);border-radius:12px;padding:3px 10px}
 .cn.t{border-color:rgba(224,122,95,.35)}.cn.c{border-color:rgba(6,182,212,.35)}
 .cn small{display:block;font-size:.6rem;color:#94a3b8;line-height:1}
-.cn b{font-family:'Changa',sans-serif;font-size:.9rem;color:var(--gold)}.cn.t b{color:var(--ter)}.cn.c b{color:var(--cy)}
+.cn b{font-family:'Segoe UI',Tahoma,Arial,sans-serif;font-size:.9rem;color:var(--gold)}.cn.t b{color:var(--ter)}.cn.c b{color:var(--cy)}
 .gb{font:inherit;font-weight:800;font-size:.75rem;color:#e2e8f0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:7px 12px;cursor:pointer;white-space:nowrap;transition:all .2s cubic-bezier(.34,1.56,.64,1)}
 .gb:hover{background:rgba(224,122,95,.2);border-color:rgba(224,122,95,.6);transform:translateY(-2px) scale(1.03);box-shadow:0 6px 20px rgba(224,122,95,.25)}
 .gb:active{transform:translateY(1px) scale(.96)}
@@ -87,6 +87,17 @@ body.controls-open #deck{transform:translateY(0);opacity:1;visibility:visible;po
  #tg2:hover,#tg2:focus-visible{opacity:1}
  #toast{top:calc(105px + env(safe-area-inset-top,0px));max-width:88vw;padding:6px 12px}
 }
+
+#tour{display:none;position:fixed;left:50%;top:calc(92px + env(safe-area-inset-top,0px));transform:translateX(-50%);width:min(92vw,470px);z-index:60;padding:.8rem .95rem .7rem;border-color:rgba(255,183,3,.55);box-shadow:0 12px 40px rgba(0,0,0,.75),0 0 24px rgba(255,183,3,.2)}
+#tour.on{display:block}
+#tbar{height:4px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden;margin-bottom:.55rem}
+#tbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--ter),var(--gold),var(--cy))}
+#tcount{font-size:.65rem;color:#94a3b8;font-weight:700;letter-spacing:.04em}
+#tour h3{margin:.1rem 0 .3rem;font-size:1rem;color:#fcd34d}
+#tour p{margin:0 0 .6rem;font-size:.82rem;line-height:1.45;color:#e2e8f0}
+.trow{display:flex;gap:.4rem;justify-content:flex-end}
+.tour-hl{outline:2px solid var(--gold)!important;box-shadow:0 0 0 4px rgba(255,183,3,.25),0 0 30px rgba(255,183,3,.55)!important}
+@media(max-width:640px){#tour{top:calc(118px + env(safe-area-inset-top,0px))}}
 </style></head><body>
 <canvas id="cv"></canvas>
 <header id="hd">
@@ -96,12 +107,13 @@ body.controls-open #deck{transform:translateY(0);opacity:1;visibility:visible;po
    <div class="cn"><span>🎖️</span><div><small>Army strength</small><b id="sN">0</b></div></div>
    <div class="cn c"><span>🐜</span><div><small>Targets destroyed</small><b id="sD">0</b></div></div>
    <div class="cn t"><span>🍯</span><div><small>Colony stock</small><b id="sS">0</b></div></div>
-   <button class="gb am" id="mute" aria-label="Mute sound">🔊</button>
+   <button class="gb am" id="mute" aria-label="Mute sound">🔊</button><button class="gb cy" id="tourBtn" aria-label="Start 1-minute tour">❓ 1-min tour</button>
   </div>
  </div>
 </header>
 <button class="gb" id="tg2" aria-label="Open controls" aria-expanded="false">🎛️ Controls</button>
 <div id="toast" role="status"></div>
+<div id="tour" class="gp" role="dialog" aria-live="polite"><div id="tbar"><i></i></div><div id="tcount"></div><h3 id="tt"></h3><p id="td"></p><div class="trow"><button class="gb" id="tskip">Skip</button><button class="gb" id="tprev">◀ Back</button><button class="gb am" id="tnext">Next ▶</button></div></div>
 <footer id="deck" class="gp" aria-hidden="true" inert>
  <div id="commands"><input id="txt" value="ANT ARMY" maxlength="24" aria-label="Text" placeholder="Type a word for the ants to form (e.g. GG, 404)...">
   <div class="in">
@@ -344,7 +356,7 @@ function draw(){const S=SK[skin];
  cx.fillStyle=S.b;for(let i=0;i<G.length;i++){const v=G[i];if(v>.15){cx.globalAlpha=Math.min(.4,v*.07);cx.fillRect((i%GW)*GC,(i/GW|0)*GC,GC,GC)}}cx.globalAlpha=1;
  cx.textAlign='center';cx.textBaseline='middle';
  foods.forEach(f=>{cx.font=(f.r*2)+'px '+EF;cx.fillStyle='#fff';cx.fillText(f.e,f.x,f.y);const w=44,p=Math.max(0,f.hp/f.max);cx.fillStyle='rgba(0,0,0,.6)';cx.fillRect(f.x-w/2,f.y-f.r-14,w,5);cx.fillStyle=p>.4?'#22c55e':'#ef4444';cx.fillRect(f.x-w/2,f.y-f.r-14,w*p,5)});
- heavies.forEach(h=>{cx.strokeStyle=S.a;cx.setLineDash([6,6]);cx.lineWidth=1;cx.beginPath();cx.arc(h.x,h.y,h.r+4,0,6.3);cx.stroke();cx.setLineDash([]);cx.font=(h.r*1.6)+'px '+EF;cx.fillStyle='#fff';cx.fillText(h.e,h.x,h.y);cx.font='700 13px Cairo,sans-serif';cx.fillStyle=h.cn>=h.need?'#22c55e':'#fde047';cx.fillText(h.cn+' / '+h.need,h.x,h.y-h.r-14)});
+ heavies.forEach(h=>{cx.strokeStyle=S.a;cx.setLineDash([6,6]);cx.lineWidth=1;cx.beginPath();cx.arc(h.x,h.y,h.r+4,0,6.3);cx.stroke();cx.setLineDash([]);cx.font=(h.r*1.6)+'px '+EF;cx.fillStyle='#fff';cx.fillText(h.e,h.x,h.y);cx.font='700 13px Tahoma,Arial,sans-serif';cx.fillStyle=h.cn>=h.need?'#22c55e':'#fde047';cx.fillText(h.cn+' / '+h.need,h.x,h.y-h.r-14)});
  crumbs.forEach(c=>{cx.fillStyle=S.g;cx.fillRect(c.x-3.5,c.y-3.5,7,7);cx.fillStyle='#fff';cx.fillRect(c.x-1.5,c.y-1.5,3,3)});
  const king=ants.find(a=>a.i===0);if(king)drawAnt(king);(map3d&&curMap?ants.slice().sort((a,b)=>(a.zd||0)-(b.zd||0)):ants).forEach(a=>{if(a.i!==0)drawAnt(a)});
  parts.forEach(p=>{cx.globalAlpha=Math.min(1,p.l/20);cx.fillStyle=p.c;cx.fillRect(p.x-1.2,p.y-1.2,2.4,2.4)});cx.globalAlpha=1;
@@ -409,4 +421,44 @@ addEventListener('keydown',e=>{if(e.code==='Space'&&e.target.tagName!=='INPUT'){
 addEventListener('keyup',e=>{if(e.code==='Space'&&e.target.tagName!=='INPUT')e.preventDefault()});
 toast('Squad ready, sir! Type a word or press Space for attention');
 requestAnimationFrame(loop);
+/* ===== 1-minute guided tour (9 steps x 6.5s) ===== */
+const TOUR_MS=6500;
+const TOUR=[
+ {t:'Welcome to Anty 🐜',d:'You command a living ant colony. The ant with the glowing ring is the General. Everything here is a sandbox: no score, no fail state, just play.',hl:null,open:false},
+ {t:'Click to drop food 🍰',d:'Click anywhere on the arena to drop food. The soldiers swarm it, nibble it down and carry crumbs back to the nest, which raises Colony stock.',hl:null,open:false},
+ {t:'Open the Controls 🎛️',d:'This button (or the H key) opens the full control deck. Everything else in the game lives inside it.',hl:'#tg2',open:false},
+ {t:'Words, shapes & commands ✍️',d:'Type a word and press Form: the ants spell it. Try shapes, the live clock, Detonate, the Military parade, or Whistle (Space) to make them line up in ranks.',hl:'#commands',open:true},
+ {t:'Mouse tools 🖌️',d:'Switch what your mouse does: draw pheromone trails, drop food, lift heavy loot (needs 40 ants), attack the cursor, make a vortex, or squash ants.',hl:'#tools',open:true},
+ {t:'Tactical formations 📐',d:'Send the whole army into a V-spearhead, pincer, hollow square, stadium wave, pulsing heart, infinity loop or music equalizer.',hl:'#fms',open:true},
+ {t:'Country maps 🗺️',d:'Pick a country and the ants arrange themselves into its map. Great for screenshots and videos.',hl:'#maps',open:true},
+ {t:'Feed the army 🍬',d:'Drop specific treats like sugar, basbousa or cookies, and watch the squad demolish them. Use the bar below to track progress.',hl:'#feed',open:true},
+ {t:'Squad skins & you\'re ready 🎖️',d:'Change the squad look (Cyber Neon, Military Gold, Fire Ants, flags). Replay this tour any time with the ❓ button. Have fun!',hl:'#skins',open:true}
+];
+let tI=-1,tTm=null,tOpened=false;
+function tourHL(sel){document.querySelectorAll('.tour-hl').forEach(x=>x.classList.remove('tour-hl'));if(sel){const e=$(sel);if(e)e.classList.add('tour-hl')}}
+function tourShow(i){
+ clearTimeout(tTm);
+ if(i<0)i=0;
+ if(i>=TOUR.length){tourEnd();return}
+ tI=i;const st=TOUR[i],open=document.body.classList.contains('controls-open');
+ if(st.open&&!open){togglePanels();tOpened=true}
+ if(!st.open&&open&&tOpened){togglePanels();tOpened=false}
+ tourHL(st.hl);
+ $('#tcount').textContent='Step '+(i+1)+' of '+TOUR.length+' · about 1 minute';
+ $('#tt').textContent=st.t;$('#td').textContent=st.d;
+ $('#tprev').style.visibility=i?'visible':'hidden';
+ $('#tnext').textContent=i===TOUR.length-1?'Finish ✔':'Next ▶';
+ const b=$('#tbar i');b.style.transition='none';b.style.width='0';void b.offsetWidth;b.style.transition='width '+TOUR_MS+'ms linear';b.style.width='100%';
+ tTm=setTimeout(()=>tourShow(i+1),TOUR_MS);
+}
+function tourStart(){$('#tour').classList.add('on');tOpened=false;tourShow(0)}
+function tourEnd(){clearTimeout(tTm);tI=-1;$('#tour').classList.remove('on');tourHL(null);if(tOpened&&document.body.classList.contains('controls-open'))togglePanels();tOpened=false;try{localStorage.setItem('antyTourSeen','1')}catch(e){}}
+$('#tourBtn').onclick=tourStart;
+$('#tnext').onclick=()=>tourShow(tI+1);
+$('#tprev').onclick=()=>tourShow(tI-1);
+$('#tskip').onclick=tourEnd;
+setTimeout(()=>{let seen=0;try{seen=localStorage.getItem('antyTourSeen')}catch(e){}if(!seen&&tI<0)tourStart()},1800);
+
+/* ===== CrazyGames SDK (safe: game still runs if SDK is missing) ===== */
+(async()=>{try{if(window.CrazyGames&&CrazyGames.SDK){await CrazyGames.SDK.init();try{CrazyGames.SDK.game.loadingStop&&CrazyGames.SDK.game.loadingStop()}catch(e){}CrazyGames.SDK.game.gameplayStart()}}catch(e){console.warn('CG SDK',e)}})();
 </script></body></html>
